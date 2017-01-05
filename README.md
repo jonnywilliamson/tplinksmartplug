@@ -236,4 +236,4 @@ This project is released under the [MIT][link-license] License.
 [link-author]: https://github.com/jonnywilliamson
 [link-repo]: https://github.com/jonnywilliamson/tplinksmartplug
 [link-issues]: https://github.com/jonnywilliamson/tplinksmartplug/issues
-[link-license]: https://github.com/jonnywilliamson/tplinksmartplug/blob/master/LICENSE
+[link-license]: https://github.com/jonnywilliamson/tplinksmartplug/blob/master/LICENSE.md
