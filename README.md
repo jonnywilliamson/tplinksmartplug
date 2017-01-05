@@ -1,5 +1,13 @@
 PHP Library to Control and Access a TP-Link Smartplug!
 =========
+<p align="center">
+<a href="https://github.com/jonnywilliamson/tplinksmartplug"><img src="https://raw.githubusercontent.com/jonnywilliamson/tplinksmartplug/master/tplinkplug.jpg" alt="Smart Plug"></a>
+<a href="https://github.com/jonnywilliamson/tplinksmartplug"><img src="https://travis-ci.org/jonnywilliamson/tplinksmartplug.svg?branch=master" alt="Build Status"></a>
+<a href="https://github.com/jonnywilliamson/tplinksmartplug"><img src="https://poser.pugx.org/williamson/tplinksmartplug/downloads" alt="Total Downloads"></a>
+<a href="https://github.com/jonnywilliamson/tplinksmartplug"><img src="https://poser.pugx.org/williamson/tplinksmartplug/v/stable" alt="Latest Stable Version"></a>
+<a href="https://github.com/jonnywilliamson/tplinksmartplug"><img src="https://poser.pugx.org/williamson/tplinksmartplug/license" alt="License"></a>
+</p>
+
 ###(Bonus Laravel integration supported!!)
 
 **[TPLink Smartplug](https://github.com/jonnywilliamson/tplinksmartplug) is a small PHP library that allows anyone to control and access a TPLink Smartplug.** 

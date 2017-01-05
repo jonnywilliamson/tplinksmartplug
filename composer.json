@@ -2,7 +2,7 @@
     "name": "williamson/tplinksmartplug",
     "description": "A PHP library to control and receive information from a TP-Link smartplug.",
     "license": "MIT",
-    "keywords": ["TPLink", "PHP", "HS110", "HS100", "Timer", "SmartPlug"],
+    "keywords": ["TPLink", "PHP", "HS110", "HS100", "Timer", "SmartPlug", "Laravel"],
     "authors": [
         {
             "name": "Jonathan Williamson",
