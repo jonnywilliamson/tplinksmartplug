@@ -220,6 +220,7 @@ Any issues, feedback, suggestions or questions please use issue tracker [here][l
 
 - [softScheck](https://github.com/softScheck/tplink-smartplug) (Who did the reverse engineering and provided the secrets on how to talk to the Smartplug.)
 - [Jonathan Williamson][link-author]
+- [Syed Irfaq R.](https://github.com/irazasyed) For the idea behind how to manage multiple devices.
 
 ## Disclaimer
 
