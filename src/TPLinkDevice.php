@@ -78,7 +78,11 @@ class TPLinkDevice
      */
     protected function getConfig($key, $default = null)
     {
-        return array_get($this->config, $key, $default);
+        if (is_array($this->config) && isset($this->config[$key])) {
+            return $this->config[$key];
+        } else {
+            return $default;
+        }
     }
 
     /**
