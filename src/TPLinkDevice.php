@@ -1,4 +1,5 @@
 <?php
+
 namespace Williamson\TPLinkSmartplug;
 
 use UnexpectedValueException;
@@ -13,7 +14,8 @@ class TPLinkDevice
 
     /**
      * TPLinkDevice constructor.
-     * @param array $config
+     *
+     * @param array  $config
      * @param string $deviceName
      */
     public function __construct(array $config, $deviceName)
@@ -38,6 +40,7 @@ class TPLinkDevice
      * Send a command to the connected device.
      *
      * @param array $command
+     *
      * @return mixed|string
      */
     public function sendCommand(array $command)
@@ -72,23 +75,25 @@ class TPLinkDevice
     }
 
     /**
-     * @param $key
+     * @param      $key
      * @param null $default
+     *
      * @return mixed
      */
     protected function getConfig($key, $default = null)
     {
         if (is_array($this->config) && isset($this->config[$key])) {
             return $this->config[$key];
-        } else {
-            return $default;
         }
+
+        return $default;
     }
 
     /**
      * Encrypt all data being sent to the device
      *
      * @param $string
+     *
      * @return mixed
      */
     protected function encrypt($string)
@@ -120,7 +125,9 @@ class TPLinkDevice
      * Decrypt the response from the device.
      *
      * Must ignore the first 4 bytes of the response to decrypt properly.
+     *
      * @param $data
+     *
      * @return mixed
      */
     protected function decrypt($data)

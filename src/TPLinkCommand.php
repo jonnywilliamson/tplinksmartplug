@@ -1,4 +1,5 @@
 <?php
+
 namespace Williamson\TPLinkSmartplug;
 
 use DateTime;
@@ -11,7 +12,7 @@ use Illuminate\Support\Collection;
  * Class TPLinkCommands
  *
  * @package Williamson\TPLinkSmartplug
- * @link https://github.com/softScheck/tplink-smartplug/blob/master/tplink-smarthome-commands.txt
+ * @link    https://github.com/softScheck/tplink-smartplug/blob/master/tplink-smarthome-commands.txt
  */
 class TPLinkCommand
 {
@@ -69,7 +70,9 @@ class TPLinkCommand
 
     /**
      * Turn On/off Device LED
+     *
      * @param bool $isOn
+     *
      * @return array
      */
     public static function setLED($isOn = true)
@@ -85,7 +88,9 @@ class TPLinkCommand
 
     /**
      * Set Device Alias
+     *
      * @param string $name
+     *
      * @return array
      */
     public static function setDeviceAlias($name)
@@ -103,6 +108,7 @@ class TPLinkCommand
      * Set MAC Address
      *
      * @param string $macAddress A mac address with hyphen between each group.
+     *
      * @return array
      */
     public static function setMacAddress($macAddress)
@@ -147,6 +153,7 @@ class TPLinkCommand
      *
      * @param float $longitude
      * @param float $latitude
+     *
      * @return array
      */
     public static function setLocation($longitude, $latitude)
@@ -221,6 +228,7 @@ class TPLinkCommand
      * Flash Downloaded Firmware
      *
      * @param bool $confirm
+     *
      * @return array
      */
     public static function flashFirmware($confirm = false)
@@ -240,6 +248,7 @@ class TPLinkCommand
      * Download Firmware from URL
      *
      * @param string $url
+     *
      * @return array
      */
     public static function downloadFirmware($url)
@@ -277,6 +286,7 @@ class TPLinkCommand
      * Reboot the device after a delay of x secs
      *
      * @param int $delay
+     *
      * @return array
      */
     public static function reboot($delay = 1)
@@ -294,6 +304,7 @@ class TPLinkCommand
      * Reset the device to factory settings after a delay of x secs
      *
      * @param int $delay
+     *
      * @return array
      */
     public static function reset($delay = 1)
@@ -340,6 +351,7 @@ class TPLinkCommand
      * Set Server URL that device connects to
      *
      * @param string $url
+     *
      * @return array
      */
     public static function cloudSetServerUrl($url = 'devs.tplinkcloud.com')
@@ -358,6 +370,7 @@ class TPLinkCommand
      *
      * @param string $email
      * @param string $password
+     *
      * @return array
      */
     public static function cloudConnectWithAccount($email, $password)
@@ -376,6 +389,7 @@ class TPLinkCommand
      * Unregister Device from Cloud Account
      *
      * @param bool $confirm
+     *
      * @return array
      */
     public static function cloudUnregisterDevice($confirm = false)
@@ -395,6 +409,7 @@ class TPLinkCommand
      * Scan for list of available APs
      *
      * @param int $refresh
+     *
      * @return array
      */
     public static function wlanScan($refresh = 1)
@@ -413,7 +428,8 @@ class TPLinkCommand
      *
      * @param string $SSID
      * @param string $password
-     * @param int $wifiType
+     * @param int    $wifiType
+     *
      * @return array
      */
     public static function wlanConnectTo($SSID, $password, $wifiType = 3)
@@ -461,7 +477,8 @@ class TPLinkCommand
      * Set the date, time and timezone on the device.
      *
      * @param DateTime $dateTime
-     * @param int $timeZoneIndex
+     * @param int      $timeZoneIndex
+     *
      * @return array
      */
     public static function setTimeAndTimeZone(DateTime $dateTime, $timeZoneIndex)
@@ -517,6 +534,7 @@ class TPLinkCommand
      *
      * @param int $vgain
      * @param int $igain
+     *
      * @return array
      */
     public static function emeterSetGains($vgain, $igain)
@@ -537,6 +555,7 @@ class TPLinkCommand
      *
      * @param int $vtarget
      * @param int $itarget
+     *
      * @return array
      */
     public static function emeterStartCalibration($vtarget, $itarget)
@@ -555,8 +574,9 @@ class TPLinkCommand
     /**
      * Get Daily Statistics for given Month
      *
-     * @param int $mm 2 digit month
+     * @param int $mm   2 digit month
      * @param int $yyyy 4 digit year
+     *
      * @return array
      */
     public static function emeterStatsMonth($mm, $yyyy)
@@ -576,6 +596,7 @@ class TPLinkCommand
      * Get Monthly Statistic for given Year
      *
      * @param int $yyyy 4 digit year
+     *
      * @return array
      */
     public static function emeterStatsYear($yyyy)
@@ -638,10 +659,10 @@ class TPLinkCommand
     /**
      * Add New Schedule Rule
      *
-     * @param DateTime $dateAndTime The actual Date and Time for this event.
-     * @param bool $turnOn Should the event turn on or off the timer.
-     * @param string $name An event name. On some clients this isn't even seen.
-     * @param array $daysOfWeekToRepeat (Optional). An array of days of the week this event should repeat. Use normal english like Tues, Saturday etc.
+     * @param DateTime $dateAndTime        The actual Date and Time for this event.
+     * @param bool     $turnOn             Should the event turn on or off the timer.
+     * @param string   $name               An event name. On some clients this isn't even seen.
+     * @param array    $daysOfWeekToRepeat (Optional). An array of days of the week this event should repeat. Use normal english like Tues, Saturday etc.
      *
      * @return array
      */
@@ -665,11 +686,11 @@ class TPLinkCommand
     /**
      * Edit Schedule Rule with given ID
      *
-     * @param string $ruleId The ID of the rule to be edited.
-     * @param DateTime $dateAndTime The actual Date and Time for this event.
-     * @param bool $turnOn Should the event turn on or off the timer.
-     * @param string $name An event name. On some clients this isn't even seen.
-     * @param array $daysOfWeekToRepeat (Optional). An array of days of the week this event should repeat. Use normal english like Tues, Saturday etc.
+     * @param string   $ruleId             The ID of the rule to be edited.
+     * @param DateTime $dateAndTime        The actual Date and Time for this event.
+     * @param bool     $turnOn             Should the event turn on or off the timer.
+     * @param string   $name               An event name. On some clients this isn't even seen.
+     * @param array    $daysOfWeekToRepeat (Optional). An array of days of the week this event should repeat. Use normal english like Tues, Saturday etc.
      *
      * @return array
      */
@@ -694,6 +715,7 @@ class TPLinkCommand
      * Delete the schedule rule with the provided ID.
      *
      * @param string $ruleId
+     *
      * @return array
      */
     public static function scheduleRuleDelete($ruleId)
@@ -752,9 +774,9 @@ class TPLinkCommand
     /**
      * Add New Countdown Rule
      *
-     * @param int $delay The number of secs until the event should fire.
-     * @param bool $turnOn Should the event turn on or off the timer.
-     * @param string $name An event name. On some clients this isn't even seen.
+     * @param int    $delay  The number of secs until the event should fire.
+     * @param bool   $turnOn Should the event turn on or off the timer.
+     * @param string $name   An event name. On some clients this isn't even seen.
      *
      * @return array
      */
@@ -769,9 +791,9 @@ class TPLinkCommand
      * Edit Countdown Rule with specified ID
      *
      * @param string $ruleId The id of the rule to edit.
-     * @param int $delay The number of secs until the event should fire.
-     * @param bool $turnOn Should the event turn on or off the timer.
-     * @param string $name An event name. On some clients this isn't even seen.
+     * @param int    $delay  The number of secs until the event should fire.
+     * @param bool   $turnOn Should the event turn on or off the timer.
+     * @param string $name   An event name. On some clients this isn't even seen.
      *
      * @return array
      */
@@ -786,6 +808,7 @@ class TPLinkCommand
      * Delete the countdown rule with the provided ID.
      *
      * @param string $ruleId
+     *
      * @return array
      */
     public static function countdownRuleDelete($ruleId)
@@ -830,10 +853,10 @@ class TPLinkCommand
     /**
      * Add New Anti theft Rule
      *
-     * @param DateTime $startTime The start date/time for the event to begin
-     * @param DateTime $endTime The end date/time for the event to finish.
-     * @param string $name An event name. On some clients this isn't even seen.
-     * @param array $daysOfWeekToRepeat (Optional). An array of days of the week this event should repeat. Use normal english like Tues, Saturday etc.
+     * @param DateTime $startTime          The start date/time for the event to begin
+     * @param DateTime $endTime            The end date/time for the event to finish.
+     * @param string   $name               An event name. On some clients this isn't even seen.
+     * @param array    $daysOfWeekToRepeat (Optional). An array of days of the week this event should repeat. Use normal english like Tues, Saturday etc.
      *
      * @return array
      */
@@ -857,16 +880,21 @@ class TPLinkCommand
     /**
      * Edit Anti theft Rule with given ID
      *
-     * @param string $ruleId The ID of the rule to be edited.
-     * @param DateTime $startTime The start date/time for the event to begin
-     * @param DateTime $endTime The end date/time for the event to finish.
-     * @param string $name An event name. On some clients this isn't even seen.
-     * @param array $daysOfWeekToRepeat (Optional). An array of days of the week this event should repeat. Use normal english like Tues, Saturday etc.
+     * @param string   $ruleId             The ID of the rule to be edited.
+     * @param DateTime $startTime          The start date/time for the event to begin
+     * @param DateTime $endTime            The end date/time for the event to finish.
+     * @param string   $name               An event name. On some clients this isn't even seen.
+     * @param array    $daysOfWeekToRepeat (Optional). An array of days of the week this event should repeat. Use normal english like Tues, Saturday etc.
      *
      * @return array
      */
-    public static function antitheftRuleEdit($ruleId, DateTime $startTime, DateTime $endTime, $name, $daysOfWeekToRepeat = [])
-    {
+    public static function antitheftRuleEdit(
+        $ruleId,
+        DateTime $startTime,
+        DateTime $endTime,
+        $name,
+        $daysOfWeekToRepeat = []
+    ) {
         $data = self::formatDates($startTime, $daysOfWeekToRepeat);
 
         return [
@@ -886,6 +914,7 @@ class TPLinkCommand
      * Delete the Anti theft rule with the provided ID.
      *
      * @param string $ruleId
+     *
      * @return array
      */
     public static function antitheftRuleDelete($ruleId)
@@ -918,7 +947,8 @@ class TPLinkCommand
      * data needed to create the event.
      *
      * @param DateTime $dateAndTime
-     * @param $weekDaysToRepeat
+     * @param          $weekDaysToRepeat
+     *
      * @return Collection
      */
     protected static function formatDates(DateTime $dateAndTime, $weekDaysToRepeat)
@@ -941,6 +971,7 @@ class TPLinkCommand
      * Create the array/matrix required for single events
      *
      * @param DateTime $dateAndTime
+     *
      * @return array
      */
     protected static function createDayMatrix(DateTime $dateAndTime)
@@ -965,6 +996,7 @@ class TPLinkCommand
      * Create the array/matrix required for repeating/reoccuring events
      *
      * @param array $daysToReoccur
+     *
      * @return array
      */
     protected static function createRepeatingDayMatrix(array $daysToReoccur)
@@ -984,6 +1016,7 @@ class TPLinkCommand
      * Return the required minute value from the supplied DateTime object
      *
      * @param DateTime $dateAndTime
+     *
      * @return int
      */
     protected static function calculateMinutes(DateTime $dateAndTime)
@@ -998,18 +1031,25 @@ class TPLinkCommand
     }
 
     /**
-     * @param string $type The type of action that should be performed, add or edit.
-     * @param DateTime $dateAndTime The actual Date and Time for this event.
-     * @param bool $turnOn Should the event turn on or off the timer.
-     * @param string $name An event name. On some clients this isn't even seen.
-     * @param array $daysOfWeekToRepeat (Optional). An array of days of the week this event should repeat. Use normal english like Tues, Saturday etc.
-     * @param Collection $data specific information depending on if the event is repeating or not.
-     * @param string $ruleId The ID of the rule to be edited.
+     * @param string     $type               The type of action that should be performed, add or edit.
+     * @param DateTime   $dateAndTime        The actual Date and Time for this event.
+     * @param bool       $turnOn             Should the event turn on or off the timer.
+     * @param string     $name               An event name. On some clients this isn't even seen.
+     * @param array      $daysOfWeekToRepeat (Optional). An array of days of the week this event should repeat. Use normal english like Tues, Saturday etc.
+     * @param Collection $data               specific information depending on if the event is repeating or not.
+     * @param string     $ruleId             The ID of the rule to be edited.
      *
      * @return array
      */
-    protected static function ruleCommonData($type, DateTime $dateAndTime, $turnOn, $name, $daysOfWeekToRepeat, $data, $ruleId)
-    {
+    protected static function ruleCommonData(
+        $type,
+        DateTime $dateAndTime,
+        $turnOn,
+        $name,
+        $daysOfWeekToRepeat,
+        $data,
+        $ruleId
+    ) {
         return [
             $type                => [
                 'id'        => $ruleId,
@@ -1037,10 +1077,10 @@ class TPLinkCommand
     }
 
     /**
-     * @param string $type The type of action that should be performed, add or edit.
-     * @param int $delay The number of secs until the event should fire.
-     * @param bool $turnOn Should the event turn on or off the timer.
-     * @param string $name An event name. On some clients this isn't even seen.
+     * @param string $type   The type of action that should be performed, add or edit.
+     * @param int    $delay  The number of secs until the event should fire.
+     * @param bool   $turnOn Should the event turn on or off the timer.
+     * @param string $name   An event name. On some clients this isn't even seen.
      * @param string $ruleId The id of the rule to edit.
      *
      * @return array
@@ -1059,18 +1099,25 @@ class TPLinkCommand
     }
 
     /**
-     * @param string $type The type of action that should be performed, add or edit.
-     * @param DateTime $startTime The start date/time for the event to begin
-     * @param DateTime $endTime The end date/time for the event to finish.
-     * @param string $name An event name. On some clients this isn't even seen.
-     * @param array $daysOfWeekToRepeat (Optional). An array of days of the week this event should repeat. Use normal english like Tues, Saturday etc.
-     * @param Collection $data specific information depending on if the event is repeating or not.
-     * @param string $ruleId The ID of the rule to be edited.
+     * @param string     $type               The type of action that should be performed, add or edit.
+     * @param DateTime   $startTime          The start date/time for the event to begin
+     * @param DateTime   $endTime            The end date/time for the event to finish.
+     * @param string     $name               An event name. On some clients this isn't even seen.
+     * @param array      $daysOfWeekToRepeat (Optional). An array of days of the week this event should repeat. Use normal english like Tues, Saturday etc.
+     * @param Collection $data               specific information depending on if the event is repeating or not.
+     * @param string     $ruleId             The ID of the rule to be edited.
      *
      * @return array
      */
-    protected static function antitheftCommonData($type, DateTime $startTime, DateTime $endTime, $name, $daysOfWeekToRepeat, $data, $ruleId)
-    {
+    protected static function antitheftCommonData(
+        $type,
+        DateTime $startTime,
+        DateTime $endTime,
+        $name,
+        $daysOfWeekToRepeat,
+        $data,
+        $ruleId
+    ) {
         return [
             $type                => [
                 'id'        => $ruleId,
