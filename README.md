@@ -207,11 +207,6 @@ The current list of commands available to use are:
  antitheftRuleWipeAll
  ```
 
-## Disclaimer
-
-This project and its author is neither associated, nor affiliated with [Telegram](https://telegram.org/) in anyway.
-See License section for more details.
-
 ## Additional information
 
 Any issues, feedback, suggestions or questions please use issue tracker [here][link-issues].
