@@ -25,15 +25,43 @@ class TPLinkDevice
     }
 
     /**
+     * Return current power status
+     *
+     * @return boolean
+     */
+    public function powerStatus()
+    {
+        return (bool)json_decode($this->sendCommand(TPLinkCommand::systemInfo()))->system->get_sysinfo->relay_state;
+    }
+
+    /**
      * Toggle the current status of the switch on/off
      *
      * @return string
      */
     public function togglePower()
     {
-        $status = (bool)json_decode($this->sendCommand(TPLinkCommand::systemInfo()))->system->get_sysinfo->relay_state;
+        return $this->powerStatus() ? $this->sendCommand(TPLinkCommand::powerOff()) : $this->sendCommand(TPLinkCommand::powerOn());
+    }
 
-        return $status ? $this->sendCommand(TPLinkCommand::powerOff()) : $this->sendCommand(TPLinkCommand::powerOn());
+    /**
+     * Change the current status of the switch to on
+     *
+     * @return string
+     */
+    public function powerOn()
+    {
+        return $this->sendCommand(TPLinkCommand::powerOn());
+    }
+
+    /**
+     * Change the current status of the switch off
+     *
+     * @return string
+     */
+    public function powerOff()
+    {
+        return $this->sendCommand(TPLinkCommand::powerOff());
     }
 
     /**
@@ -62,11 +90,11 @@ class TPLinkDevice
      */
     protected function connectToDevice()
     {
-        $this->client = stream_socket_client(
+        $this->client = @stream_socket_client(
             "tcp://" . $this->getConfig("ip") . ":" . $this->getConfig("port"),
             $errorNumber,
             $errorMessage,
-            5
+            $this->getConfig('timeout', 5)
         );
 
         if ($this->client === false) {
@@ -80,7 +108,7 @@ class TPLinkDevice
      *
      * @return mixed
      */
-    protected function getConfig($key, $default = null)
+    public function getConfig($key, $default = null)
     {
         if (is_array($this->config) && isset($this->config[$key])) {
             return $this->config[$key];
