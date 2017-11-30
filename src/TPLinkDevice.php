@@ -80,7 +80,7 @@ class TPLinkDevice
      *
      * @return mixed
      */
-    protected function getConfig($key, $default = null)
+    public function getConfig($key, $default = null)
     {
         if (is_array($this->config) && isset($this->config[$key])) {
             return $this->config[$key];
