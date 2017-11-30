@@ -62,11 +62,11 @@ class TPLinkDevice
      */
     protected function connectToDevice()
     {
-        $this->client = stream_socket_client(
+        $this->client = @stream_socket_client(
             "tcp://" . $this->getConfig("ip") . ":" . $this->getConfig("port"),
             $errorNumber,
             $errorMessage,
-            5
+            $this->getConfig('timeout')
         );
 
         if ($this->client === false) {
