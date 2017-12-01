@@ -153,6 +153,19 @@ You must provide the IP range you wish to scan, use it as follows:
 
 The auto discovery command will take a while to scan, once completed you can use `deviceList()` method to view the new configuration and any found devices.
 
+```php
+//Non laravel
+    $tpLinkManager->deviceList();
+
+//Laravel
+    // with facade
+    $devices = TPLink::deviceList();
+    
+    // without facade
+    $devices = app('tplink')->deviceList();
+    $devices = app(TPLinkManager::class)->deviceList();
+```
+
 #### Toggle Power
 There is one command that is called directly on the `TPLinkDevice` and that is the `togglePower()` method.
 
