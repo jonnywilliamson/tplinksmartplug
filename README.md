@@ -59,11 +59,14 @@ return [
     'lamp' => [
         'ip'   => '192.168.1.100', //Or hostname eg: home.example.com
         'port' => '9999',
+        'timeout' => 5 // Optional, timeout setting (how long we will try communicate with device before giving up)
     ],
 ];
 ```
 
-You may add as many devices as you wish, as long as you specify the IP address (or host address if required) and port number to access each one. Giving each device a name makes it easy to identify them when coding later. _(Please note that the name you give here does NOT have to match the actual name you might have assigned the device using an official app like Kasa. They do NOT have to match)_
+You may add as many devices as you wish, as long as you specify the IP address (or host address if required) and port number to access each one. Giving each device a name makes it easy to identify them when coding later. _(Please note that the name you give here does NOT have to match the actual name you might have assigned the device using an official app like Kasa. They do NOT have to match)
+
+You can use the `autoDiscoverTPLinkDevices` method to automatically find networked devices.
 
 ## Usage
 You can access your device either through the `TPLinkManager` class (especially useful if you have multiple devices), or directly using the `TPLinkDevice` class.
@@ -129,6 +132,27 @@ If a command requires a parameter, provide that as well:
     //without facade
     $tpDevice->sendCommand(TPLinkCommand::setLED(false));
 ```
+
+
+####Auto Discovery
+You can search your local network for devices using `TPLinkManager`, using the method `autoDiscoverTPLinkDevices` 
+all found devices will be added to the 'TPLinkManager' config automatically, exposed using `deviceList()`.
+
+You must provide the IP range you wish to scan, use it as follows: 
+```php
+//Non laravel
+    $tpLinkManager->autoDiscoverTPLinkDevices('192.168.0.*');
+
+//Laravel
+    // with facade
+    TPLink::autoDiscoverTPLinkDevices('192.168.0.*');
+    
+    // without facade
+    app(TPLinkManager::class)->autoDiscoverTPLinkDevices('192.168.0.*');
+```
+
+The auto discovery command will take a while to scan, once completed you can use `deviceList()` method to view the new configuration and any found devices.
+
 
 ####Toggle Power
 There is one command that is called directly on the `TPLinkDevice` and that is the `togglePower()` method.
@@ -216,6 +240,7 @@ Any issues, feedback, suggestions or questions please use issue tracker [here][l
 - [softScheck](https://github.com/softScheck/tplink-smartplug) (Who did the reverse engineering and provided the secrets on how to talk to the Smartplug.)
 - [Jonathan Williamson][link-author]
 - [Syed Irfaq R.](https://github.com/irazasyed) For the idea behind how to manage multiple devices.
+- [Shane Rutter](https://shanerutter.co.uk) Auto-Discovery feature
 
 ## Disclaimer
 
