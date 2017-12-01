@@ -148,6 +148,7 @@ You must provide the IP range you wish to scan, use it as follows:
     TPLink::autoDiscoverTPLinkDevices('192.168.0.*');
     
     // without facade
+    app('tplink')->autoDiscoverTPLinkDevices('192.168.0.*');
     app(TPLinkManager::class)->autoDiscoverTPLinkDevices('192.168.0.*');
 ```
 
