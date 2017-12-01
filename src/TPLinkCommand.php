@@ -7,7 +7,6 @@ use stdClass;
 use InvalidArgumentException;
 use Illuminate\Support\Collection;
 
-
 /**
  * Class TPLinkCommands
  *
@@ -114,7 +113,7 @@ class TPLinkCommand
     public static function setMacAddress($macAddress)
     {
         if (filter_var($macAddress, FILTER_VALIDATE_MAC) === false) {
-            throw new InvalidArgumentException('The supplied MAC address is not valid. Try again using hyphens between each group of characters.');
+            throw new InvalidArgumentException('MAC address invalid. Try hyphens between each group of characters.');
         }
 
         return [
@@ -241,7 +240,7 @@ class TPLinkCommand
             ];
         }
 
-        throw new InvalidArgumentException('You must set the confirm flag to true before flashing firmware is allowed.');
+        throw new InvalidArgumentException('Confirm flag to true before flashing firmware is allowed.');
     }
 
     /**
@@ -402,7 +401,7 @@ class TPLinkCommand
             ];
         }
 
-        throw new InvalidArgumentException('You must set the confirm flag to true before un-registering the device is allowed.');
+        throw new InvalidArgumentException('Confirm flag to true before un-registering the device is allowed.');
     }
 
     /**
@@ -662,7 +661,7 @@ class TPLinkCommand
      * @param DateTime $dateAndTime        The actual Date and Time for this event.
      * @param bool     $turnOn             Should the event turn on or off the timer.
      * @param string   $name               An event name. On some clients this isn't even seen.
-     * @param array    $daysOfWeekToRepeat (Optional). An array of days of the week this event should repeat. Use normal english like Tues, Saturday etc.
+     * @param array    $daysOfWeekToRepeat (Optional). Days of week event should repeat. Use EN like Tues, Saturday etc.
      *
      * @return array
      */
@@ -690,7 +689,7 @@ class TPLinkCommand
      * @param DateTime $dateAndTime        The actual Date and Time for this event.
      * @param bool     $turnOn             Should the event turn on or off the timer.
      * @param string   $name               An event name. On some clients this isn't even seen.
-     * @param array    $daysOfWeekToRepeat (Optional). An array of days of the week this event should repeat. Use normal english like Tues, Saturday etc.
+     * @param array    $daysOfWeekToRepeat (Optional). Days of week event should repeat. Use EN like Tues, Saturday etc.
      *
      * @return array
      */
@@ -856,7 +855,7 @@ class TPLinkCommand
      * @param DateTime $startTime          The start date/time for the event to begin
      * @param DateTime $endTime            The end date/time for the event to finish.
      * @param string   $name               An event name. On some clients this isn't even seen.
-     * @param array    $daysOfWeekToRepeat (Optional). An array of days of the week this event should repeat. Use normal english like Tues, Saturday etc.
+     * @param array    $daysOfWeekToRepeat (Optional). Days of week event should repeat. Use EN like Tues, Saturday etc.
      *
      * @return array
      */
@@ -884,7 +883,7 @@ class TPLinkCommand
      * @param DateTime $startTime          The start date/time for the event to begin
      * @param DateTime $endTime            The end date/time for the event to finish.
      * @param string   $name               An event name. On some clients this isn't even seen.
-     * @param array    $daysOfWeekToRepeat (Optional). An array of days of the week this event should repeat. Use normal english like Tues, Saturday etc.
+     * @param array    $daysOfWeekToRepeat (Optional). Days of week event should repeat. Use EN like Tues, Saturday etc.
      *
      * @return array
      */
@@ -1035,7 +1034,7 @@ class TPLinkCommand
      * @param DateTime   $dateAndTime        The actual Date and Time for this event.
      * @param bool       $turnOn             Should the event turn on or off the timer.
      * @param string     $name               An event name. On some clients this isn't even seen.
-     * @param array      $daysOfWeekToRepeat (Optional). An array of days of the week this event should repeat. Use normal english like Tues, Saturday etc.
+     * @param array      $daysOfWeekToRepeat (Optional) Day of week event should repeat. Use EN like Tues, Saturday etc.
      * @param Collection $data               specific information depending on if the event is repeating or not.
      * @param string     $ruleId             The ID of the rule to be edited.
      *
@@ -1103,7 +1102,7 @@ class TPLinkCommand
      * @param DateTime   $startTime          The start date/time for the event to begin
      * @param DateTime   $endTime            The end date/time for the event to finish.
      * @param string     $name               An event name. On some clients this isn't even seen.
-     * @param array      $daysOfWeekToRepeat (Optional). An array of days of the week this event should repeat. Use normal english like Tues, Saturday etc.
+     * @param array      $daysOfWeekToRepeat (Optional) Day of week event should repeat. Use EN like Tues, Saturday etc.
      * @param Collection $data               specific information depending on if the event is repeating or not.
      * @param string     $ruleId             The ID of the rule to be edited.
      *

@@ -27,20 +27,17 @@ class TPLinkServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(TPLinkManager::class,
-            function ($app) {
-                $config = (array)$app['config']['TPLink'];
+        $this->app->singleton(TPLinkManager::class, function ($app) {
+            $config = (array)$app['config']['TPLink'];
 
-                return new TPLinkManager($config);
-            });
+            return new TPLinkManager($config);
+        });
 
         $this->app->alias(TPLinkManager::class, 'tplink');
-
 
         //Auto-register the TPLink facade if the user hasn't already
         //assigned it to another class.
         if (class_exists(AliasLoader::class)) {
-
             $loader = AliasLoader::getInstance();
 
             if (!array_key_exists('TPLink', $loader->getAliases())) {

@@ -38,20 +38,20 @@ class TPLinkManager
     public function autoDiscoverTPLinkDevices($ipRange, $timeout = 1)
     {
         $ips = Range::parse($ipRange);
-        foreach($ips AS $ip){
+        foreach ($ips as $ip) {
             // Try to connect to a IP and port
             $device = new TPLinkDevice(['ip' => $ip, 'port' => 9999, 'timeout' => $timeout], 'autodiscovery');
-            try{
+            try {
                 // Try sending systemInfo command
                 // Possible we may get a blank response, if querying another device which uses these ports
                 $response = $device->sendCommand(TPLinkCommand::systemInfo());
-                if(!empty($response)){
+                if (!empty($response)) {
                     // Check the returned data JSON decodes
                     // Make sure is not NULL, some devices may return a single character
                     // LB100 Series seems to respond on port 9999, however return a bad string
                     // TODO:: investigate LB100 support
                     $jsonResponse = json_decode($response);
-                    if(!is_null($jsonResponse)){
+                    if (!is_null($jsonResponse)) {
                         $this->newTPLinkDevice([
                             'ip' => (string)$ip,
                             'port' => 9999,
@@ -59,7 +59,9 @@ class TPLinkManager
                         ], $jsonResponse->system->get_sysinfo->alias);
                     }
                 }
-            } catch(\UnexpectedValueException $e) {}
+            } catch (\UnexpectedValueException $e) {
+                // Lets not do anything here
+            }
         }
     }
 }

@@ -70,7 +70,7 @@ class TPLinkDevice
         );
 
         if ($this->client === false) {
-            throw new UnexpectedValueException("Failed to connect to {$this->deviceName}: $errorMessage ($errorNumber)");
+            throw new UnexpectedValueException("Failed connect to {$this->deviceName}: $errorMessage ($errorNumber)");
         }
     }
 
@@ -101,12 +101,14 @@ class TPLinkDevice
         $key = 171;
 
         return collect(str_split($string))
-            ->reduce(function ($result, $character) use (&$key) {
-                $key = $key ^ ord($character);
+            ->reduce(
+                function ($result, $character) use (&$key) {
+                    $key = $key ^ ord($character);
 
-                return $result .= chr($key);
-            },
-                "\0\0\0\0");
+                    return $result .= chr($key);
+                },
+                "\0\0\0\0"
+            );
     }
 
     /**
@@ -117,7 +119,7 @@ class TPLinkDevice
     {
         return json_encode([
             'success' => false,
-            'message' => "When sending the command to the smartplug {$this->deviceName}, the connection terminated before the command was sent.",
+            'message' => "{$this->deviceName} : connection terminated before the command was sent.",
         ]);
     }
 
