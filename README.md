@@ -133,7 +133,6 @@ If a command requires a parameter, provide that as well:
     $tpDevice->sendCommand(TPLinkCommand::setLED(false));
 ```
 
-
 ####Auto Discovery
 You can search your local network for devices using `TPLinkManager`, using the method `autoDiscoverTPLinkDevices` 
 all found devices will be added to the 'TPLinkManager' config automatically, exposed using `deviceList()`.
@@ -148,11 +147,11 @@ You must provide the IP range you wish to scan, use it as follows:
     TPLink::autoDiscoverTPLinkDevices('192.168.0.*');
     
     // without facade
+    app('tplink')->autoDiscoverTPLinkDevices('192.168.0.*');
     app(TPLinkManager::class)->autoDiscoverTPLinkDevices('192.168.0.*');
 ```
 
 The auto discovery command will take a while to scan, once completed you can use `deviceList()` method to view the new configuration and any found devices.
-
 
 ####Toggle Power
 There is one command that is called directly on the `TPLinkDevice` and that is the `togglePower()` method.
