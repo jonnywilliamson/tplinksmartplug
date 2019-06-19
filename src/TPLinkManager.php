@@ -114,8 +114,4 @@ class TPLinkManager
         ], $jsonResponse->system->get_sysinfo->alias);
     }
 
-
-
-
-
 }
