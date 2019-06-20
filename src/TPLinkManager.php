@@ -16,6 +16,13 @@ class TPLinkManager
         $this->config = $config;
     }
 
+    /**
+     * Get a device object pre-configured in config
+     *
+     * @param string $name
+     *
+     * @return TPLinkDevice
+     */
     public function device($name = 'default')
     {
         if (!isset($this->config[$name]) || !is_array($this->config[$name]) || empty($this->config[$name]['ip'])) {
@@ -25,12 +32,25 @@ class TPLinkManager
         return new TPLinkDevice($this->config[$name], $name);
     }
 
-    protected function newTPLinkDevice($config, $name)
+    /**
+     * Add a new device to the config setup
+     *
+     * @param $config
+     * @param $name
+     *
+     * @return TPLinkDevice
+     */
+    public function newDevice($config, $name)
     {
         $this->config[$name] = $config;
         return new TPLinkDevice($config, $name);
     }
 
+    /**
+     * Return current config
+     *
+     * @return array
+     */
     public function deviceList()
     {
         return $this->config;
@@ -51,12 +71,11 @@ class TPLinkManager
     public function autoDiscoverTPLinkDevices($ipRange, $timeout = 1)
     {
         return collect(Range::parse($ipRange))
-            ->map(function ($ip) use ($timeout) {
-                $response = $this->deviceResponse($ip, $timeout);
+            ->filter(function ($ip) use ($timeout) {
+                $response = $this->deviceResponse((string)$ip, $timeout);
 
-                return is_null($response) ? $response : $this->validTPLinkResponse($response, $ip);
-            })
-            ->filter();
+                return is_null($response) ? $response : $this->validTPLinkResponse($response, (string)$ip);
+            });
     }
 
     /**
@@ -107,7 +126,7 @@ class TPLinkManager
      */
     protected function discoveredDevice($jsonResponse, $ip)
     {
-        return $this->newTPLinkDevice([
+        return $this->newDevice([
             'ip'         => (string)$ip,
             'port'       => 9999,
             'systemInfo' => $jsonResponse->system->get_sysinfo,
