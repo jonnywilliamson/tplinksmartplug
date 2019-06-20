@@ -137,7 +137,7 @@ class TPLinkDevice
 
                     return $result .= chr($key);
                 },
-                "\0\0\0\0"
+                strrev(pack('I', strlen($string)))
             );
     }
 
