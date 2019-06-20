@@ -10,6 +10,7 @@ class TPLinkDevice
     protected $config;
     protected $deviceName;
     protected $client;
+    protected $encryptionKey;
 
 
     /**
@@ -18,10 +19,11 @@ class TPLinkDevice
      * @param array  $config
      * @param string $deviceName
      */
-    public function __construct(array $config, $deviceName)
+    public function __construct(array $config, $deviceName, $encryptionKey = 171)
     {
         $this->config = $config;
         $this->deviceName = $deviceName;
+        $this->encryptionKey = $encryptionKey;
     }
 
     /**
@@ -126,7 +128,7 @@ class TPLinkDevice
      */
     protected function encrypt($string)
     {
-        $key = 171;
+        $key = $this->encryptionKey;
 
         return collect(str_split($string))
             ->reduce(
@@ -162,7 +164,7 @@ class TPLinkDevice
      */
     protected function decrypt($data)
     {
-        $key = 171;
+        $key = $this->encryptionKey;
 
         return collect(str_split(substr($data, 4)))
             ->reduce(function ($result, $character) use (&$key) {
