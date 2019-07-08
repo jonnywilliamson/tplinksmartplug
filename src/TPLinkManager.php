@@ -17,7 +17,7 @@ class TPLinkManager
     public function device($name = 'default')
     {
         if (!isset($this->config[$name]) || !is_array($this->config[$name]) || empty($this->config[$name]['ip'])) {
-            throw new InvalidArgumentException('You have not setup the details for a device named ' . $name);
+            throw new InvalidArgumentException('You have not setup all the details for a device named ' . $name);
         }
 
         return $this->newTPLinkDevice($this->config[$name], $name);

@@ -2,13 +2,18 @@
 
 namespace Williamson\TPLinkSmartplug\Laravel;
 
-use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\ServiceProvider;
 use Williamson\TPLinkSmartplug\TPLinkManager;
-use Williamson\TPLinkSmartplug\Laravel\Facades\TPLinkFacade;
 
 class TPLinkServiceProvider extends ServiceProvider
 {
+
+    /**
+     * Indicates if loading of the provider is deferred.
+     *
+     * @var bool
+     */
+    protected $defer = true;
 
     /**
      * Bootstrap the application services.
@@ -27,25 +32,20 @@ class TPLinkServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(TPLinkManager::class,
-            function ($app) {
-                $config = (array)$app['config']['TPLink'];
-
-                return new TPLinkManager($config);
-            });
+        $this->app->singleton(TPLinkManager::class, function () {
+            return new TPLinkManager(config('TPLink'));
+        });
 
         $this->app->alias(TPLinkManager::class, 'tplink');
+    }
 
-
-        //Auto-register the TPLink facade if the user hasn't already
-        //assigned it to another class.
-        if (class_exists(AliasLoader::class)) {
-
-            $loader = AliasLoader::getInstance();
-
-            if (!array_key_exists('TPLink', $loader->getAliases())) {
-                $loader->alias('TPLink', TPLinkFacade::class);
-            }
-        }
+    /**
+     * Get the services provided by the provider.
+     *
+     * @return array
+     */
+    public function provides()
+    {
+        return [TPLinkManager::class];
     }
 }

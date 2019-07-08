@@ -29,17 +29,25 @@ composer require williamson/tplinksmartplug
 
 ### Laravel Installation/Integration
 
-Once the TPLink Smartplug library is installed, you need to register the library's service provider, in `config/app.php`:
+This library supports Laravel's auto discovery feature for auto registering the service provider and facade. If your version of Laravel supports auto discovery, after you have added this package YOU ARE NOW DONE! 
+
+If you are using a very old version of Laravel, once this package is installed, you need to register the package's service provider, in `config/app.php`:
 
 ```php
-'providers' => array(
+'providers' => [
     //...
     Williamson\TPLinkSmartplug\Laravel\TPLinkServiceProvider::class,
-)
+]
 ```
 ##### Facades
 
-By default, this library will *automatically* register a facade to be used in Laravel. The package checks first to ensure `TPLink` has not already be registered and if this is the case, will register `TPLink` as your quick access to the library. More examples to follow.
+Only if your version of Laravel does NOT support auto discovery then add the following to the aliases section of 'app.php'.
+```php
+'aliases' => [
+    //...
+    "TPLink" => Williamson\TPLinkSmartplug\Laravel\Facades\TPLinkFacade::class
+]
+```
 
 ##### Config file
 This package requires a config file so that you can provide the address/details of the TPLink devices you would like to control. To generate this file, run the following command: 
