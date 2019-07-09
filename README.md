@@ -29,6 +29,8 @@ composer require williamson/tplinksmartplug
 
 ### Laravel Installation/Integration
 
+###### Now Supports Laravel 5.5 auto package discovery (you do not need to do the below step if you have Laravel 5.5+)
+
 Once the TPLink Smartplug library is installed, you need to register the library's service provider, in `config/app.php`:
 
 ```php

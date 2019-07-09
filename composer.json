@@ -20,5 +20,12 @@
         "psr-4": {
             "Williamson\\TPLinkSmartplug\\": "src"
         }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Williamson\\TPLinkSmartplug\\Laravel\\TPLinkServiceProvider"
+            ]
+        }
     }
 }
