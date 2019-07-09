@@ -29,7 +29,7 @@ class TPLinkManager
             throw new InvalidArgumentException('You have not setup the details for a device named ' . $name);
         }
 
-        return new TPLinkDevice($this->config[$name], $name);
+        return new TPLinkDevice($this->config[$name], $name, $this->config[$name]->deviceType);
     }
 
     /**
@@ -37,13 +37,14 @@ class TPLinkManager
      *
      * @param $config
      * @param $name
+     * @param $deviceType
      *
      * @return TPLinkDevice
      */
-    public function newDevice($config, $name)
+    public function newDevice($config, $name, $deviceType)
     {
         $this->config[$name] = $config;
-        return new TPLinkDevice($config, $name);
+        return new TPLinkDevice($config, $name, $deviceType);
     }
 
     /**
@@ -133,7 +134,7 @@ class TPLinkManager
             'ip'         => (string)$ip,
             'port'       => 9999,
             'systemInfo' => $jsonResponse->system->get_sysinfo,
-        ], $jsonResponse->system->get_sysinfo->alias);
+        ], $jsonResponse->system->get_sysinfo->alias, (isset($jsonResponse->system->get_sysinfo->type)) ? $jsonResponse->system->get_sysinfo->type : $jsonResponse->system->get_sysinfo->mic_type);
 
         // Callback function during discovery
         if (!is_null($callbackFunction)) {

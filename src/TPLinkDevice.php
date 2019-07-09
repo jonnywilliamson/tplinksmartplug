@@ -11,6 +11,7 @@ class TPLinkDevice
     protected $deviceName;
     protected $client;
     protected $encryptionKey;
+    protected $deviceType;
 
 
     /**
@@ -18,12 +19,14 @@ class TPLinkDevice
      *
      * @param array $config
      * @param string $deviceName
+     * @param $deviceType
      * @param int $encryptionKey
      */
-    public function __construct(array $config, $deviceName, $encryptionKey = 171)
+    public function __construct(array $config, $deviceName, $deviceType = "IOT.SMARTPLUGSWITCH", $encryptionKey = 171)
     {
         $this->config = $config;
         $this->deviceName = $deviceName;
+        $this->deviceType = $deviceType;
         $this->encryptionKey = $encryptionKey;
     }
 
@@ -65,6 +68,16 @@ class TPLinkDevice
     public function powerOff()
     {
         return $this->sendCommand(TPLinkCommand::powerOff());
+    }
+
+    /**
+     * What type of device is this?
+     *
+     * @return string
+     */
+    public function deviceType()
+    {
+        return $this->deviceType;
     }
 
     /**
