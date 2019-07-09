@@ -16,8 +16,9 @@ class TPLinkDevice
     /**
      * TPLinkDevice constructor.
      *
-     * @param array  $config
+     * @param array $config
      * @param string $deviceName
+     * @param int $encryptionKey
      */
     public function __construct(array $config, $deviceName, $encryptionKey = 171)
     {
@@ -82,6 +83,7 @@ class TPLinkDevice
         }
 
         $response = $this->decrypt(stream_get_contents($this->client));
+
         $this->disconnect();
 
         return $response;
@@ -98,6 +100,9 @@ class TPLinkDevice
             $errorMessage,
             $this->getConfig('timeout', 5)
         );
+
+        // Set stream timeout (important or some devices will cause the stream read function to hang for a period)
+        stream_set_timeout($this->client, $this->getConfig('timeout_stream', 1));
 
         if ($this->client === false) {
             throw new UnexpectedValueException("Failed connect to {$this->deviceName}: $errorMessage ($errorNumber)");
@@ -133,7 +138,7 @@ class TPLinkDevice
         return collect(str_split($string))
             ->reduce(
                 function ($result, $character) use (&$key) {
-                    $key = $key ^ ord($character);
+                    $key = ord($character) ^ $key;
 
                     return $result .= chr($key);
                 },
@@ -160,15 +165,17 @@ class TPLinkDevice
      *
      * @param $data
      *
+     * @param bool $stripHeader
+     *
      * @return mixed
      */
-    protected function decrypt($data)
+    protected function decrypt($data, $stripHeader = true)
     {
         $key = $this->encryptionKey;
 
-        return collect(str_split(substr($data, 4)))
+        return collect(str_split(substr($data, ($stripHeader) ? 4 : 0)))
             ->reduce(function ($result, $character) use (&$key) {
-                $a = $key ^ ord($character);
+                $a = ord($character) ^ $key;
                 $key = ord($character);
 
                 return $result .= chr($a);

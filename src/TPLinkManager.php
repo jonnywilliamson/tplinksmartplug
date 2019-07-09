@@ -65,17 +65,18 @@ class TPLinkManager
      *
      * @param     $ipRange
      * @param int $timeout
+     * @param int $timeoutStream
      *
      * @return Collection
      */
-    public function autoDiscoverTPLinkDevices($ipRange, $timeout = 1)
+    public function autoDiscoverTPLinkDevices($ipRange, $timeout = 1, $timeoutStream = 1)
     {
         return collect(Range::parse($ipRange))
-            ->filter(function ($ip) use ($timeout) {
-                $response = $this->deviceResponse((string)$ip, $timeout);
+            ->map(function ($ip) use ($timeout, $timeoutStream) {
+                $response = $this->deviceResponse((string)$ip, $timeout, $timeoutStream);
 
                 return is_null($response) ? $response : $this->validTPLinkResponse($response, (string)$ip);
-            });
+            })->filter();
     }
 
     /**
@@ -84,13 +85,14 @@ class TPLinkManager
      *
      * @param $ip
      * @param $timeout
+     * @param $timeoutStream
      *
      * @return null
      */
-    protected function deviceResponse($ip, $timeout)
+    protected function deviceResponse($ip, $timeout, $timeoutStream)
     {
         try {
-            $device = new TPLinkDevice(['ip' => $ip, 'port' => 9999, 'timeout' => $timeout], 'autodiscovery');
+            $device = new TPLinkDevice(['ip' => $ip, 'port' => 9999, 'timeout' => $timeout, 'timeout_stream' => $timeoutStream], 'autodiscovery');
 
             return $device->sendCommand(TPLinkCommand::systemInfo());
         } catch (\Exception $exception) {
@@ -101,8 +103,6 @@ class TPLinkManager
     /**
      * Check the returned data JSON decodes
      * Make sure is not NULL, some devices may return a single character
-     * LB100 Series seems to respond on port 9999, however return a bad string
-     * TODO:: investigate LB100 support
      *
      * @param $response
      * @param $ip
