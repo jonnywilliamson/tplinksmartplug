@@ -59,7 +59,8 @@ return [
     'lamp' => [
         'ip'   => '192.168.1.100', //Or hostname eg: home.example.com
         'port' => '9999',
-        'timeout' => 5 // Optional, timeout setting (how long we will try communicate with device before giving up)
+        'timeout' => 5, // Optional, timeout setting (how long we will try communicate with device before giving up)
+        'timeout_stream' => 5, // Optional, timeout setting for stream (how long to wait for the response stream)
     ],
 ];
 ```
@@ -252,7 +253,7 @@ Any issues, feedback, suggestions or questions please use issue tracker [here][l
 - [softScheck](https://github.com/softScheck/tplink-smartplug) (Who did the reverse engineering and provided the secrets on how to talk to the Smartplug.)
 - [Jonathan Williamson][link-author]
 - [Syed Irfaq R.](https://github.com/irazasyed) For the idea behind how to manage multiple devices.
-- [Shane Rutter](https://shanerutter.co.uk) Auto-Discovery feature
+- [Shane Rutter](https://shanerutter.co.uk) Various features such as Auto-Discovery
 
 ## Disclaimer
 
