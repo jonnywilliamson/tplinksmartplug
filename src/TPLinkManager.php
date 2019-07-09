@@ -71,13 +71,26 @@ class TPLinkManager
      *
      * @return Collection
      */
-    public function autoDiscoverTPLinkDevices($ipRange, $timeout = 1, $timeoutStream = 1, $callbackFunction = null)
+    public function autoDiscoverTPLinkDevices($ipRange, $timeout = 1, $timeoutStream = 1, $callbackFunction = null, $maxDiscoveredDevices = 0)
     {
-        return collect(Range::parse($ipRange))
-            ->map(function ($ip) use ($timeout, $timeoutStream, $callbackFunction) {
-                $response = $this->deviceResponse((string)$ip, $timeout, $timeoutStream);
+        $discoveredCount = 0;
 
-                return is_null($response) ? $response : $this->validTPLinkResponse($response, (string)$ip, $callbackFunction);
+        return collect(Range::parse($ipRange))
+            ->map(function ($ip) use ($timeout, $timeoutStream, $callbackFunction, $maxDiscoveredDevices, &$discoveredCount) {
+                // Discovered max devices, do not do checks for further devices
+                if ($maxDiscoveredDevices > 0 && $discoveredCount >= $maxDiscoveredDevices) {
+                    return null;
+                }
+
+                $response = $this->deviceResponse((string)$ip, $timeout, $timeoutStream);
+                $device = $this->validTPLinkResponse($response, (string)$ip, $callbackFunction);
+
+                if (!is_null($device)) {
+                    $discoveredCount++;
+                    return $device;
+                }
+
+                return $response;
             })->filter();
     }
 
