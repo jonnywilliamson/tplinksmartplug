@@ -25,7 +25,10 @@
         "laravel": {
             "providers": [
                 "Williamson\\TPLinkSmartplug\\Laravel\\TPLinkServiceProvider"
-            ]
+            ],
+            "aliases": {
+                "TPLink": "Williamson\\TPLinkSmartplug\\Laravel\\Facades\\TPLinkFacade"
+            }
         }
     }
 }
