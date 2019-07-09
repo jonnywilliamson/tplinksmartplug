@@ -66,16 +66,17 @@ class TPLinkManager
      * @param     $ipRange
      * @param int $timeout
      * @param int $timeoutStream
+     * @param null $callbackFunction
      *
      * @return Collection
      */
-    public function autoDiscoverTPLinkDevices($ipRange, $timeout = 1, $timeoutStream = 1)
+    public function autoDiscoverTPLinkDevices($ipRange, $timeout = 1, $timeoutStream = 1, $callbackFunction = null)
     {
         return collect(Range::parse($ipRange))
-            ->map(function ($ip) use ($timeout, $timeoutStream) {
+            ->map(function ($ip) use ($timeout, $timeoutStream, $callbackFunction) {
                 $response = $this->deviceResponse((string)$ip, $timeout, $timeoutStream);
 
-                return is_null($response) ? $response : $this->validTPLinkResponse($response, (string)$ip);
+                return is_null($response) ? $response : $this->validTPLinkResponse($response, (string)$ip, $callbackFunction);
             })->filter();
     }
 
@@ -106,14 +107,15 @@ class TPLinkManager
      *
      * @param $response
      * @param $ip
+     * @param null $callbackFunction
      *
      * @return mixed|TPLinkDevice
      */
-    protected function validTPLinkResponse($response, $ip)
+    protected function validTPLinkResponse($response, $ip, $callbackFunction = null)
     {
         $jsonResponse = json_decode($response);
 
-        return is_null($jsonResponse) ? $jsonResponse : $this->discoveredDevice($jsonResponse, $ip);
+        return is_null($jsonResponse) ? $jsonResponse : $this->discoveredDevice($jsonResponse, $ip, $callbackFunction);
     }
 
     /**
@@ -121,16 +123,24 @@ class TPLinkManager
      *
      * @param $jsonResponse
      * @param $ip
+     * @param null $callbackFunction
      *
      * @return TPLinkDevice
      */
-    protected function discoveredDevice($jsonResponse, $ip)
+    protected function discoveredDevice($jsonResponse, $ip, $callbackFunction = null)
     {
-        return $this->newDevice([
+        $device = $this->newDevice([
             'ip'         => (string)$ip,
             'port'       => 9999,
             'systemInfo' => $jsonResponse->system->get_sysinfo,
         ], $jsonResponse->system->get_sysinfo->alias);
+
+        // Callback function during discovery
+        if (!is_null($callbackFunction)) {
+            call_user_func($callbackFunction, $device);
+        }
+
+        return $device;
     }
 
 }
