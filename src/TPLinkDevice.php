@@ -37,7 +37,15 @@ class TPLinkDevice
      */
     public function powerStatus()
     {
-        return (bool)json_decode($this->sendCommand(TPLinkCommand::systemInfo()))->system->get_sysinfo->relay_state;
+        if ($this->deviceType() == "IOT.SMARTBULB") {
+            return (bool)json_decode($this->sendCommand(TPLinkCommand::systemInfo()))->system->get_sysinfo->light_state->on_off;
+        }
+
+        if ($this->deviceType() == "IOT.SMARTPLUGSWITCH") {
+            return (bool)json_decode($this->sendCommand(TPLinkCommand::systemInfo()))->system->get_sysinfo->relay_state;
+        }
+
+        return false;
     }
 
     /**
@@ -47,7 +55,7 @@ class TPLinkDevice
      */
     public function togglePower()
     {
-        return $this->powerStatus() ? $this->sendCommand(TPLinkCommand::powerOff()) : $this->sendCommand(TPLinkCommand::powerOn());
+        return $this->powerStatus() ? $this->powerOff() : $this->powerOn();
     }
 
     /**
@@ -57,7 +65,15 @@ class TPLinkDevice
      */
     public function powerOn()
     {
-        return $this->sendCommand(TPLinkCommand::powerOn());
+        if ($this->deviceType() == "IOT.SMARTBULB") {
+            return $this->sendCommand(TPLinkCommand::lightOn());
+        }
+
+        if ($this->deviceType() == "IOT.SMARTPLUGSWITCH") {
+            return $this->sendCommand(TPLinkCommand::powerOn());
+        }
+
+        return '';
     }
 
     /**
@@ -67,7 +83,15 @@ class TPLinkDevice
      */
     public function powerOff()
     {
-        return $this->sendCommand(TPLinkCommand::powerOff());
+        if ($this->deviceType() == "IOT.SMARTBULB") {
+            return $this->sendCommand(TPLinkCommand::lightOff());
+        }
+
+        if ($this->deviceType() == "IOT.SMARTPLUGSWITCH") {
+            return $this->sendCommand(TPLinkCommand::powerOff());
+        }
+
+        return '';
     }
 
     /**

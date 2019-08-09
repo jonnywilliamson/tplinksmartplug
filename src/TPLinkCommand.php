@@ -1143,4 +1143,58 @@ class TPLinkCommand
             ],
         ];
     }
+
+    /**
+     * @param int $brightness
+     * @param int $transPeriod
+     * @param int $hue
+     * @param int $saturation
+     * @param int $color_temp
+     * @param string $mode
+     *
+     * @return array
+     */
+    public static function lightControlValues($brightness = 100, $transPeriod = 100, $hue = 120, $saturation = 150, $color_temp = 2700, $mode = 'normal')
+    {
+        return [
+            "transition_period" => $transPeriod,
+            "mode" => $mode,
+            "hue" => $hue,
+            "saturation" => $saturation,
+            "color_temp" => $color_temp,
+            "brightness" => $brightness,
+        ];
+    }
+
+    /**
+     * @param array $params
+     *
+     * @return array
+     */
+    public static function lightOn($params = [])
+    {
+        $cmd = array_merge(["ignore_default" => 1, "on_off" => 1], $params);
+
+        return [
+            'smartlife.iot.smartbulb.lightingservice' => [
+                'transition_light_state' => $cmd
+            ]
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public static function lightOff()
+    {
+        return [
+            'smartlife.iot.smartbulb.lightingservice' => [
+                'transition_light_state' => [
+                    "ignore_default" => 1,
+                    "on_off" => 0,
+                ],
+            ]
+        ];
+    }
+
 }
