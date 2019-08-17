@@ -7,7 +7,6 @@ use stdClass;
 use InvalidArgumentException;
 use Illuminate\Support\Collection;
 
-
 /**
  * Class TPLinkCommands
  *
@@ -114,7 +113,7 @@ class TPLinkCommand
     public static function setMacAddress($macAddress)
     {
         if (filter_var($macAddress, FILTER_VALIDATE_MAC) === false) {
-            throw new InvalidArgumentException('The supplied MAC address is not valid. Try again using hyphens between each group of characters.');
+            throw new InvalidArgumentException('MAC address invalid. Try hyphens between each group of characters.');
         }
 
         return [
@@ -241,7 +240,7 @@ class TPLinkCommand
             ];
         }
 
-        throw new InvalidArgumentException('You must set the confirm flag to true before flashing firmware is allowed.');
+        throw new InvalidArgumentException('Confirm flag to true before flashing firmware is allowed.');
     }
 
     /**
@@ -402,7 +401,7 @@ class TPLinkCommand
             ];
         }
 
-        throw new InvalidArgumentException('You must set the confirm flag to true before un-registering the device is allowed.');
+        throw new InvalidArgumentException('Confirm flag to true before un-registering the device is allowed.');
     }
 
     /**
@@ -662,7 +661,7 @@ class TPLinkCommand
      * @param DateTime $dateAndTime        The actual Date and Time for this event.
      * @param bool     $turnOn             Should the event turn on or off the timer.
      * @param string   $name               An event name. On some clients this isn't even seen.
-     * @param array    $daysOfWeekToRepeat (Optional). An array of days of the week this event should repeat. Use normal english like Tues, Saturday etc.
+     * @param array    $daysOfWeekToRepeat (Optional). Days of week event should repeat. Use EN like Tues, Saturday etc.
      *
      * @return array
      */
@@ -690,7 +689,7 @@ class TPLinkCommand
      * @param DateTime $dateAndTime        The actual Date and Time for this event.
      * @param bool     $turnOn             Should the event turn on or off the timer.
      * @param string   $name               An event name. On some clients this isn't even seen.
-     * @param array    $daysOfWeekToRepeat (Optional). An array of days of the week this event should repeat. Use normal english like Tues, Saturday etc.
+     * @param array    $daysOfWeekToRepeat (Optional). Days of week event should repeat. Use EN like Tues, Saturday etc.
      *
      * @return array
      */
@@ -856,7 +855,7 @@ class TPLinkCommand
      * @param DateTime $startTime          The start date/time for the event to begin
      * @param DateTime $endTime            The end date/time for the event to finish.
      * @param string   $name               An event name. On some clients this isn't even seen.
-     * @param array    $daysOfWeekToRepeat (Optional). An array of days of the week this event should repeat. Use normal english like Tues, Saturday etc.
+     * @param array    $daysOfWeekToRepeat (Optional). Days of week event should repeat. Use EN like Tues, Saturday etc.
      *
      * @return array
      */
@@ -884,7 +883,7 @@ class TPLinkCommand
      * @param DateTime $startTime          The start date/time for the event to begin
      * @param DateTime $endTime            The end date/time for the event to finish.
      * @param string   $name               An event name. On some clients this isn't even seen.
-     * @param array    $daysOfWeekToRepeat (Optional). An array of days of the week this event should repeat. Use normal english like Tues, Saturday etc.
+     * @param array    $daysOfWeekToRepeat (Optional). Days of week event should repeat. Use EN like Tues, Saturday etc.
      *
      * @return array
      */
@@ -1035,7 +1034,7 @@ class TPLinkCommand
      * @param DateTime   $dateAndTime        The actual Date and Time for this event.
      * @param bool       $turnOn             Should the event turn on or off the timer.
      * @param string     $name               An event name. On some clients this isn't even seen.
-     * @param array      $daysOfWeekToRepeat (Optional). An array of days of the week this event should repeat. Use normal english like Tues, Saturday etc.
+     * @param array      $daysOfWeekToRepeat (Optional) Day of week event should repeat. Use EN like Tues, Saturday etc.
      * @param Collection $data               specific information depending on if the event is repeating or not.
      * @param string     $ruleId             The ID of the rule to be edited.
      *
@@ -1103,7 +1102,7 @@ class TPLinkCommand
      * @param DateTime   $startTime          The start date/time for the event to begin
      * @param DateTime   $endTime            The end date/time for the event to finish.
      * @param string     $name               An event name. On some clients this isn't even seen.
-     * @param array      $daysOfWeekToRepeat (Optional). An array of days of the week this event should repeat. Use normal english like Tues, Saturday etc.
+     * @param array      $daysOfWeekToRepeat (Optional) Day of week event should repeat. Use EN like Tues, Saturday etc.
      * @param Collection $data               specific information depending on if the event is repeating or not.
      * @param string     $ruleId             The ID of the rule to be edited.
      *
@@ -1144,4 +1143,64 @@ class TPLinkCommand
             ],
         ];
     }
+
+    /**
+     * @param int    $brightness
+     * @param int    $transPeriod
+     * @param int    $hue
+     * @param int    $saturation
+     * @param int    $color_temp
+     * @param string $mode
+     *
+     * @return array
+     */
+    public static function lightControlValues(
+        $brightness = 100,
+        $transPeriod = 100,
+        $hue = 120,
+        $saturation = 150,
+        $color_temp = 2700,
+        $mode = 'normal'
+    ) {
+        return [
+            "transition_period" => $transPeriod,
+            "mode"              => $mode,
+            "hue"               => $hue,
+            "saturation"        => $saturation,
+            "color_temp"        => $color_temp,
+            "brightness"        => $brightness,
+        ];
+    }
+
+    /**
+     * @param array $params
+     *
+     * @return array
+     */
+    public static function lightOn($params = [])
+    {
+        $cmd = array_merge(["ignore_default" => 1, "on_off" => 1], $params);
+
+        return [
+            'smartlife.iot.smartbulb.lightingservice' => [
+                'transition_light_state' => $cmd,
+            ],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public static function lightOff()
+    {
+        return [
+            'smartlife.iot.smartbulb.lightingservice' => [
+                'transition_light_state' => [
+                    "ignore_default" => 1,
+                    "on_off"         => 0,
+                ],
+            ],
+        ];
+    }
+
 }

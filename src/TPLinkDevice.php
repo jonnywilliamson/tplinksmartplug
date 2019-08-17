@@ -10,6 +10,8 @@ class TPLinkDevice
     protected $config;
     protected $deviceName;
     protected $client;
+    protected $encryptionKey;
+    protected $deviceType;
 
 
     /**
@@ -17,11 +19,32 @@ class TPLinkDevice
      *
      * @param array  $config
      * @param string $deviceName
+     * @param int    $encryptionKey
      */
-    public function __construct(array $config, $deviceName)
+    public function __construct(array $config, $deviceName, $encryptionKey = 171)
     {
         $this->config = $config;
         $this->deviceName = $deviceName;
+        $this->deviceType = $config['deviceType'] ?? "IOT.SMARTPLUGSWITCH";
+        $this->encryptionKey = $encryptionKey;
+    }
+
+    /**
+     * Return current power status
+     *
+     * @return boolean
+     */
+    public function powerStatus()
+    {
+        if ($this->deviceType() == "IOT.SMARTBULB") {
+            return (bool)json_decode($this->sendCommand(TPLinkCommand::systemInfo()))->system->get_sysinfo->light_state->on_off;
+        }
+
+        if ($this->deviceType() == "IOT.SMARTPLUGSWITCH") {
+            return (bool)json_decode($this->sendCommand(TPLinkCommand::systemInfo()))->system->get_sysinfo->relay_state;
+        }
+
+        return false;
     }
 
     /**
@@ -31,9 +54,53 @@ class TPLinkDevice
      */
     public function togglePower()
     {
-        $status = (bool)json_decode($this->sendCommand(TPLinkCommand::systemInfo()))->system->get_sysinfo->relay_state;
+        return $this->powerStatus() ? $this->powerOff() : $this->powerOn();
+    }
 
-        return $status ? $this->sendCommand(TPLinkCommand::powerOff()) : $this->sendCommand(TPLinkCommand::powerOn());
+    /**
+     * Change the current status of the switch to on
+     *
+     * @return string
+     */
+    public function powerOn()
+    {
+        if ($this->deviceType() == "IOT.SMARTBULB") {
+            return $this->sendCommand(TPLinkCommand::lightOn());
+        }
+
+        if ($this->deviceType() == "IOT.SMARTPLUGSWITCH") {
+            return $this->sendCommand(TPLinkCommand::powerOn());
+        }
+
+        return '';
+    }
+
+    /**
+     * Change the current status of the switch off
+     *
+     * @return string
+     */
+    public function powerOff()
+    {
+        if ($this->deviceType() == "IOT.SMARTBULB") {
+            return $this->sendCommand(TPLinkCommand::lightOff());
+        }
+
+        if ($this->deviceType() == "IOT.SMARTPLUGSWITCH") {
+            return $this->sendCommand(TPLinkCommand::powerOff());
+        }
+
+        return '';
+    }
+
+    /**
+     * What type of device is this?
+     *
+     * @return string
+     */
+    public function deviceType()
+    {
+        return $this->deviceType;
     }
 
     /**
@@ -52,6 +119,7 @@ class TPLinkDevice
         }
 
         $response = $this->decrypt(stream_get_contents($this->client));
+
         $this->disconnect();
 
         return $response;
@@ -66,11 +134,14 @@ class TPLinkDevice
             "tcp://" . $this->getConfig("ip") . ":" . $this->getConfig("port"),
             $errorNumber,
             $errorMessage,
-            5
+            $this->getConfig('timeout', 5)
         );
 
+        // Set stream timeout (important or some devices will cause the stream read function to hang for a period)
+        stream_set_timeout($this->client, $this->getConfig('timeout_stream', 1));
+
         if ($this->client === false) {
-            throw new UnexpectedValueException("Failed to connect to {$this->deviceName}: $errorMessage ($errorNumber)");
+            throw new UnexpectedValueException("Failed connect to {$this->deviceName}: $errorMessage ($errorNumber)");
         }
     }
 
@@ -80,7 +151,7 @@ class TPLinkDevice
      *
      * @return mixed
      */
-    protected function getConfig($key, $default = null)
+    public function getConfig($key, $default = null)
     {
         if (is_array($this->config) && isset($this->config[$key])) {
             return $this->config[$key];
@@ -98,15 +169,17 @@ class TPLinkDevice
      */
     protected function encrypt($string)
     {
-        $key = 171;
+        $key = $this->encryptionKey;
 
         return collect(str_split($string))
-            ->reduce(function ($result, $character) use (&$key) {
-                $key = $key ^ ord($character);
+            ->reduce(
+                function ($result, $character) use (&$key) {
+                    $key = ord($character) ^ $key;
 
-                return $result .= chr($key);
-            },
-                "\0\0\0\0");
+                    return $result .= chr($key);
+                },
+                strrev(pack('I', strlen($string)))
+            );
     }
 
     /**
@@ -117,7 +190,7 @@ class TPLinkDevice
     {
         return json_encode([
             'success' => false,
-            'message' => "When sending the command to the smartplug {$this->deviceName}, the connection terminated before the command was sent.",
+            'message' => "{$this->deviceName} : connection terminated before the command was sent.",
         ]);
     }
 
@@ -126,17 +199,19 @@ class TPLinkDevice
      *
      * Must ignore the first 4 bytes of the response to decrypt properly.
      *
-     * @param $data
+     * @param      $data
+     *
+     * @param bool $stripHeader
      *
      * @return mixed
      */
-    protected function decrypt($data)
+    protected function decrypt($data, $stripHeader = true)
     {
-        $key = 171;
+        $key = $this->encryptionKey;
 
-        return collect(str_split(substr($data, 4)))
+        return collect(str_split(substr($data, ($stripHeader) ? 4 : 0)))
             ->reduce(function ($result, $character) use (&$key) {
-                $a = $key ^ ord($character);
+                $a = ord($character) ^ $key;
                 $key = ord($character);
 
                 return $result .= chr($a);

@@ -29,9 +29,9 @@ composer require williamson/tplinksmartplug
 
 ### Laravel Installation/Integration
 
-This library supports Laravel's auto discovery feature for auto registering the service provider and facade. If your version of Laravel supports auto discovery, after you have added this package YOU ARE NOW DONE! 
+###### Now Supports Laravel 5.5 auto package discovery (you do not need to do the below step if you have Laravel 5.5+)
 
-If you are using a very old version of Laravel, once this package is installed, you need to register the package's service provider, in `config/app.php`:
+Once the TPLink Smartplug library is installed, you need to register the library's service provider, in `config/app.php`:
 
 ```php
 'providers' => [
@@ -41,13 +41,7 @@ If you are using a very old version of Laravel, once this package is installed, 
 ```
 ##### Facades
 
-Only if your version of Laravel does NOT support auto discovery then add the following to the aliases section of 'app.php'.
-```php
-'aliases' => [
-    //...
-    "TPLink" => Williamson\TPLinkSmartplug\Laravel\Facades\TPLinkFacade::class
-]
-```
+By default, this library will *automatically* register a facade to be used in Laravel. The package checks first to ensure `TPLink` has not already be registered and if this is the case, will register `TPLink` as your quick access to the library. More examples to follow.
 
 ##### Config file
 This package requires a config file so that you can provide the address/details of the TPLink devices you would like to control. To generate this file, run the following command: 
@@ -65,13 +59,17 @@ The config file is a very simple array structured file. A config file is require
 <?php
 return [
     'lamp' => [
-        'ip'   => '192.168.1.100', //Or hostname eg: home.example.com
+        'ip'   => '192.168.1.100',  //Or hostname eg: home.example.com
         'port' => '9999',
+        'timeout' => 5,             // Optional, timeout setting (how long we will try communicate with device before giving up)
+        'timeout_stream' => 5,      // Optional, timeout setting for stream (how long to wait for the response from the device)
     ],
 ];
 ```
 
-You may add as many devices as you wish, as long as you specify the IP address (or host address if required) and port number to access each one. Giving each device a name makes it easy to identify them when coding later. _(Please note that the name you give here does NOT have to match the actual name you might have assigned the device using an official app like Kasa. They do NOT have to match)_
+You may add as many devices as you wish, as long as you specify the IP address (or host address if required) and port number to access each one. Giving each device a name makes it easy to identify them when coding later. _(Please note that the name you give here does NOT have to match the actual name you might have assigned the device using an official app like Kasa. They do NOT have to match)
+
+You can use the `autoDiscoverTPLinkDevices` method to automatically find networked devices.
 
 ## Usage
 You can access your device either through the `TPLinkManager` class (especially useful if you have multiple devices), or directly using the `TPLinkDevice` class.
@@ -138,7 +136,45 @@ If a command requires a parameter, provide that as well:
     $tpDevice->sendCommand(TPLinkCommand::setLED(false));
 ```
 
-####Toggle Power
+#### Auto Discovery
+You can search your local network for devices using `TPLinkManager`, using the method `autoDiscoverTPLinkDevices` 
+all found devices will be added to the 'TPLinkManager' config automatically, exposed using `deviceList()`.
+
+You must provide the IP range you wish to scan, examples of usage are as follows: 
+```php
+//Non laravel
+    $tpLinkManager->autoDiscoverTPLinkDevices('192.168.0.*');
+    $tpLinkManager->autoDiscoverTPLinkDevices('192.168.0.10-192.168.0.40');
+
+//Laravel
+    // with facade
+    TPLink::autoDiscoverTPLinkDevices('192.168.0.*');
+    TPLink::autoDiscoverTPLinkDevices('192.168.0.10-192.168.0.40');
+    
+    // without facade
+    app('tplink')->autoDiscoverTPLinkDevices('192.168.0.*');
+    app('tplink')->autoDiscoverTPLinkDevices('192.168.0.10-192.168.0.40');
+
+    app(TPLinkManager::class)->autoDiscoverTPLinkDevices('192.168.0.*');
+    app(TPLinkManager::class)->autoDiscoverTPLinkDevices('192.168.0.10-192.168.0.40');
+```
+
+The auto discovery command will take a while to scan, once completed you can use `deviceList()` method to view the new configuration and any found devices.
+
+```php
+//Non laravel
+    $tpLinkManager->deviceList();
+
+//Laravel
+    // with facade
+    $devices = TPLink::deviceList();
+    
+    // without facade
+    $devices = app('tplink')->deviceList();
+    $devices = app(TPLinkManager::class)->deviceList();
+```
+
+#### Toggle Power
 There is one command that is called directly on the `TPLinkDevice` and that is the `togglePower()` method.
 
 If you only wish to toggle the current power state of the plug, use it as follows: 
@@ -224,6 +260,7 @@ Any issues, feedback, suggestions or questions please use issue tracker [here][l
 - [softScheck](https://github.com/softScheck/tplink-smartplug) (Who did the reverse engineering and provided the secrets on how to talk to the Smartplug.)
 - [Jonathan Williamson][link-author]
 - [Syed Irfaq R.](https://github.com/irazasyed) For the idea behind how to manage multiple devices.
+- [Shane Rutter](https://shanerutter.co.uk) Various features such as Auto-Discovery
 
 ## Disclaimer
 
