@@ -2,6 +2,7 @@
 
 namespace Williamson\TPLinkSmartplug;
 
+use Exception;
 use IPTools\Range;
 use InvalidArgumentException;
 use Tightenco\Collect\Support\Collection;
@@ -30,21 +31,6 @@ class TPLinkManager
         }
 
         return new TPLinkDevice($this->config[$name], $name);
-    }
-
-    /**
-     * Add a new device to the config setup
-     *
-     * @param $config
-     * @param $name
-     *
-     * @return TPLinkDevice
-     */
-    public function newDevice($config, $name)
-    {
-        $this->config[$name] = $config;
-
-        return new TPLinkDevice($config, $name);
     }
 
     /**
@@ -130,7 +116,7 @@ class TPLinkManager
             ], 'autodiscovery');
 
             return $device->sendCommand(TPLinkCommand::systemInfo());
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             return null;
         }
     }
@@ -178,6 +164,21 @@ class TPLinkManager
         }
 
         return $device;
+    }
+
+    /**
+     * Add a new device to the config setup
+     *
+     * @param $config
+     * @param $name
+     *
+     * @return TPLinkDevice
+     */
+    public function newDevice($config, $name)
+    {
+        $this->config[$name] = $config;
+
+        return new TPLinkDevice($config, $name);
     }
 
     private function detectDeviceType($jsonResponse)

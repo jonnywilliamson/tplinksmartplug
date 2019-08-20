@@ -1,6 +1,6 @@
-PHP Library to Control and Access a TP-Link Smartplug!
+PHP Library to Control and Access a TP-Link Smartplug OR TP Smart Bulbs!
 =========
-<p align="center">
+<p style="text-align: center">
 <a href="https://github.com/jonnywilliamson/tplinksmartplug"><img src="https://raw.githubusercontent.com/jonnywilliamson/tplinksmartplug/master/tplinkplug.jpg" alt="Smart Plug"></a><br />
 <a href="https://github.com/jonnywilliamson/tplinksmartplug"><img src="https://travis-ci.org/jonnywilliamson/tplinksmartplug.svg?branch=master" alt="Build Status"></a>
 <a href="https://github.com/jonnywilliamson/tplinksmartplug"><img src="https://poser.pugx.org/williamson/tplinksmartplug/downloads" alt="Total Downloads"></a>
@@ -69,7 +69,7 @@ return [
 
 You may add as many devices as you wish, as long as you specify the IP address (or host address if required) and port number to access each one. Giving each device a name makes it easy to identify them when coding later. _(Please note that the name you give here does NOT have to match the actual name you might have assigned the device using an official app like Kasa. They do NOT have to match)
 
-You can use the `autoDiscoverTPLinkDevices` method to automatically find networked devices.
+If you do not know the IP address of your devices, you can use the `autoDiscoverTPLinkDevices` method to automatically scan and find devices on your network for you to save into your config file.
 
 ## Usage
 You can access your device either through the `TPLinkManager` class (especially useful if you have multiple devices), or directly using the `TPLinkDevice` class.
@@ -140,6 +140,8 @@ If a command requires a parameter, provide that as well:
 You can search your local network for devices using `TPLinkManager`, using the method `autoDiscoverTPLinkDevices` 
 all found devices will be added to the 'TPLinkManager' config automatically, exposed using `deviceList()`.
 
+However this information will not automatically be persisted. You must save the details into your config file if you wish to avoid having to keep scanning your network.
+
 You must provide the IP range you wish to scan, examples of usage are as follows: 
 ```php
 //Non laravel
@@ -175,9 +177,12 @@ The auto discovery command will take a while to scan, once completed you can use
 ```
 
 #### Toggle Power
-There is one command that is called directly on the `TPLinkDevice` and that is the `togglePower()` method.
+There are a few convenience commands that can be called directly on the `TPLinkDevice`. Those methods are
+ `togglePower()`
+ `powerOn()`
+ `powerOff()`
 
-If you only wish to toggle the current power state of the plug, use it as follows: 
+Eg. if you only wish to toggle the current power state of the plug, use it as follows: 
 ```php
 //Non laravel
     
@@ -271,7 +276,7 @@ See License section for more details.
 
 This project is released under the [MIT][link-license] License.
 
-© 2017 [Jonathan Williamson][link-author], All rights reserved.
+© 2019 [Jonathan Williamson][link-author], All rights reserved.
 
 [link-author]: https://github.com/jonnywilliamson
 [link-repo]: https://github.com/jonnywilliamson/tplinksmartplug

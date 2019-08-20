@@ -33,8 +33,8 @@ class TPLinkServiceProvider extends ServiceProvider
 
         $this->app->alias(TPLinkManager::class, 'tplink');
 
-        //Auto-register the TPLink facade if the user hasn't already
-        //assigned it to another class. Takes care of Laravel <5.5 users.
+        // Auto-register the TPLink facade if the user hasn't already
+        // assigned it to another class. Takes care of Laravel <5.5 users.
         if (class_exists(AliasLoader::class)) {
             $loader = AliasLoader::getInstance();
 

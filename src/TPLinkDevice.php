@@ -25,26 +25,8 @@ class TPLinkDevice
     {
         $this->config = $config;
         $this->deviceName = $deviceName;
-        $this->deviceType = $config['deviceType'] ?? "IOT.SMARTPLUGSWITCH";
+        $this->deviceType = isset($config['deviceType']) ? $config['deviceType'] : "IOT.SMARTPLUGSWITCH";
         $this->encryptionKey = $encryptionKey;
-    }
-
-    /**
-     * Return current power status
-     *
-     * @return boolean
-     */
-    public function powerStatus()
-    {
-        if ($this->deviceType() == "IOT.SMARTBULB") {
-            return (bool)json_decode($this->sendCommand(TPLinkCommand::systemInfo()))->system->get_sysinfo->light_state->on_off;
-        }
-
-        if ($this->deviceType() == "IOT.SMARTPLUGSWITCH") {
-            return (bool)json_decode($this->sendCommand(TPLinkCommand::systemInfo()))->system->get_sysinfo->relay_state;
-        }
-
-        return false;
     }
 
     /**
@@ -55,6 +37,25 @@ class TPLinkDevice
     public function togglePower()
     {
         return $this->powerStatus() ? $this->powerOff() : $this->powerOn();
+    }
+
+
+    /**
+     * Change the current status of the switch off
+     *
+     * @return string
+     */
+    public function powerOff()
+    {
+        if ($this->deviceType() == "IOT.SMARTBULB") {
+            return $this->sendCommand(TPLinkCommand::lightOff());
+        }
+
+        if ($this->deviceType() == "IOT.SMARTPLUGSWITCH") {
+            return $this->sendCommand(TPLinkCommand::powerOff());
+        }
+
+        return '';
     }
 
     /**
@@ -76,21 +77,21 @@ class TPLinkDevice
     }
 
     /**
-     * Change the current status of the switch off
+     * Return current power status
      *
-     * @return string
+     * @return boolean
      */
-    public function powerOff()
+    public function powerStatus()
     {
         if ($this->deviceType() == "IOT.SMARTBULB") {
-            return $this->sendCommand(TPLinkCommand::lightOff());
+            return (bool)json_decode($this->sendCommand(TPLinkCommand::systemInfo()))->system->get_sysinfo->light_state->on_off;
         }
 
         if ($this->deviceType() == "IOT.SMARTPLUGSWITCH") {
-            return $this->sendCommand(TPLinkCommand::powerOff());
+            return (bool)json_decode($this->sendCommand(TPLinkCommand::systemInfo()))->system->get_sysinfo->relay_state;
         }
 
-        return '';
+        return false;
     }
 
     /**
