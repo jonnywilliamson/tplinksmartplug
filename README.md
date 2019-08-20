@@ -1,6 +1,6 @@
 PHP Library to Control and Access a TP-Link Smartplug OR TP Smart Bulbs!
 =========
-<p style="text-align: center">
+<p align="center">
 <a href="https://github.com/jonnywilliamson/tplinksmartplug"><img src="https://raw.githubusercontent.com/jonnywilliamson/tplinksmartplug/master/tplinkplug.jpg" alt="Smart Plug"></a><br />
 <a href="https://github.com/jonnywilliamson/tplinksmartplug"><img src="https://travis-ci.org/jonnywilliamson/tplinksmartplug.svg?branch=master" alt="Build Status"></a>
 <a href="https://github.com/jonnywilliamson/tplinksmartplug"><img src="https://poser.pugx.org/williamson/tplinksmartplug/downloads" alt="Total Downloads"></a>
