@@ -3,9 +3,9 @@
 namespace Williamson\TPLinkSmartplug;
 
 use Exception;
+use Illuminate\Support\Collection;
 use IPTools\Range;
 use InvalidArgumentException;
-use Tightenco\Collect\Support\Collection;
 
 class TPLinkManager
 {

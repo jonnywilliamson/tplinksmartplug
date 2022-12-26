@@ -10,7 +10,7 @@
         }
     ],
     "require": {
-        "tightenco/collect": "^5.3",
+        "illuminate/collections": ">5.0",
 		"s1lentium/iptools": "^1.1"
     },
     "require-dev": {
